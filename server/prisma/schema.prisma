@@ -1,0 +1,183 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SkillType {
+  offer
+  want
+}
+
+enum Level {
+  beginner
+  intermediate
+  advanced
+}
+
+enum RequestStatus {
+  pending
+  accepted
+  declined
+  cancelled
+}
+
+enum SessionStatus {
+  scheduled
+  completed
+  cancelled
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  department   String?
+  year         Int?
+  bio          String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  userSkills        UserSkill[]
+  availabilitySlots AvailabilitySlot[]
+  sentRequests      MatchRequest[] @relation("Requester")
+  receivedRequests  MatchRequest[] @relation("Receiver")
+  tutorSessions     Session[]      @relation("Tutor")
+  learnerSessions   Session[]      @relation("Learner")
+  messages          Message[]
+  reviewsWritten    Review[]       @relation("Reviewer")
+  reviewsReceived   Review[]       @relation("Reviewee")
+  notifications     Notification[]
+
+  @@map("users")
+}
+
+model Skill {
+  id       Int     @id @default(autoincrement())
+  name     String  @unique
+  category String?
+
+  userSkills    UserSkill[]
+  matchRequests MatchRequest[]
+  sessions      Session[]
+
+  @@map("skills")
+}
+
+model UserSkill {
+  id      Int       @id @default(autoincrement())
+  userId  Int       @map("user_id")
+  skillId Int       @map("skill_id")
+  type    SkillType
+  level   Level?
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id])
+
+  @@unique([userId, skillId, type])
+  @@map("user_skills")
+}
+
+model AvailabilitySlot {
+  id        Int    @id @default(autoincrement())
+  userId    Int    @map("user_id")
+  dayOfWeek Int    @map("day_of_week") // 0 = Sunday
+  startTime String @map("start_time") // "HH:MM", for example "16:00"
+  endTime   String @map("end_time")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("availability_slots")
+}
+
+model MatchRequest {
+  id          Int           @id @default(autoincrement())
+  requesterId Int           @map("requester_id")
+  receiverId  Int           @map("receiver_id")
+  skillId     Int           @map("skill_id")
+  message     String?
+  status      RequestStatus @default(pending)
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  requester User  @relation("Requester", fields: [requesterId], references: [id])
+  receiver  User  @relation("Receiver", fields: [receiverId], references: [id])
+  skill     Skill @relation(fields: [skillId], references: [id])
+
+  sessions Session[]
+  messages Message[]
+
+  @@map("match_requests")
+}
+
+model Session {
+  id             Int           @id @default(autoincrement())
+  matchRequestId Int           @map("match_request_id")
+  tutorId        Int           @map("tutor_id")
+  learnerId      Int           @map("learner_id")
+  skillId        Int           @map("skill_id")
+  startTime      DateTime      @map("start_time")
+  endTime        DateTime      @map("end_time")
+  meetingInfo    String?       @map("meeting_info")
+  status         SessionStatus @default(scheduled)
+
+  matchRequest MatchRequest @relation(fields: [matchRequestId], references: [id])
+  tutor        User         @relation("Tutor", fields: [tutorId], references: [id])
+  learner      User         @relation("Learner", fields: [learnerId], references: [id])
+  skill        Skill        @relation(fields: [skillId], references: [id])
+
+  reviews Review[]
+
+  @@map("sessions")
+}
+
+model Message {
+  id             Int       @id @default(autoincrement())
+  matchRequestId Int       @map("match_request_id")
+  senderId       Int       @map("sender_id")
+  body           String
+  createdAt      DateTime  @default(now()) @map("created_at")
+  readAt         DateTime? @map("read_at")
+
+  matchRequest MatchRequest @relation(fields: [matchRequestId], references: [id])
+  sender       User         @relation(fields: [senderId], references: [id])
+
+  @@map("messages")
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  sessionId  Int      @map("session_id")
+  reviewerId Int      @map("reviewer_id")
+  revieweeId Int      @map("reviewee_id")
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  session  Session @relation(fields: [sessionId], references: [id])
+  reviewer User    @relation("Reviewer", fields: [reviewerId], references: [id])
+  reviewee User    @relation("Reviewee", fields: [revieweeId], references: [id])
+
+  @@unique([sessionId, reviewerId])
+  @@map("reviews")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  type      String
+  content   String
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
