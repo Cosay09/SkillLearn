@@ -4,21 +4,30 @@
 
 import { useId } from "react";
 
-export default function FormField({ label, hint, ...inputProps }) {
+export default function FormField({
+  label,
+  hint,
+  as: Control = "input",
+  children,
+  ...controlProps
+}) {
   const id = useId();
   const hintId = `${id}-hint`;
+  const size = Control === "textarea" ? "min-h-28 py-2.5" : "h-11";
 
   return (
     <div>
       <label htmlFor={id} className="mb-1.5 block text-sm font-medium">
         {label}
       </label>
-      <input
+      <Control
         id={id}
         aria-describedby={hint ? hintId : undefined}
-        {...inputProps}
-        className="h-11 w-full rounded-(--radius-control) border border-line-strong bg-canvas px-3.5 text-base outline-none transition-[border-color,box-shadow] duration-150 focus:border-brand focus:ring-2 focus:ring-brand/30"
-      />
+        {...controlProps}
+        className={`field w-full ${size}`}
+      >
+        {children}
+      </Control>
       {hint && (
         <p id={hintId} className="mt-1.5 text-sm text-muted">
           {hint}
