@@ -17,7 +17,7 @@ export default function Dashboard() {
   return (
     <div>
       <h1 className="text-2xl font-bold">Welcome, {user.name}</h1>
-      <p className="mt-1 text-slate-600">
+      <p className="mt-1 text-slate-00">
         Your sessions, requests and matches will appear here.
       </p>
 
