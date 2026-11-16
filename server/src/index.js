@@ -3,8 +3,6 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
- import userRoutes from "./routes/userRoutes.js";
- import skillRoutes from "./routes/skillRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import skillRoutes from "./routes/skillRoutes.js";
 
