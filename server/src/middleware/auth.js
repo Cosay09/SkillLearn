@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { prisma } from "../lib/prisma.js";
 import { AppError } from "../utils/AppError.js";
 
 export function requireAuth(req, res, next) {
@@ -22,4 +23,23 @@ export function requireAuth(req, res, next) {
       ),
     );
   }
+}
+
+// Use after requireAuth on every route that unverified students must not reach
+export async function requireVerified(req, res, next) {
+  const user = await prisma.user.findUnique({
+    where: { id: req.userId },
+    select: { emailVerifiedAt: true },
+  });
+
+  if (!user?.emailVerifiedAt) {
+    return next(
+      new AppError(
+        403,
+        "EMAIL_NOT_VERIFIED",
+        "Verify your university email first.",
+      ),
+    );
+  }
+  next();
 }

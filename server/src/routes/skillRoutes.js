@@ -1,7 +1,7 @@
 import { Router } from "express";
+import { requireAuth, requireVerified } from "../middleware/auth.js";
 import { z } from "zod";
 import { validate } from "../middleware/validate.js";
-import { requireAuth } from "../middleware/auth.js";
 import * as c from "../controllers/skillController.js";
 
 const createSchema = z.object({
@@ -10,7 +10,7 @@ const createSchema = z.object({
 });
 
 const router = Router();
-router.use(requireAuth);
+router.use(requireAuth, requireVerified);
 
 router.get("/", c.list);
 router.post("/", validate(createSchema), c.create);

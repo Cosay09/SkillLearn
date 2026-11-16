@@ -15,10 +15,24 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+const verifySchema = z.object({
+  token: z.string().min(10, "The link is incomplete"),
+});
+
 const router = Router();
 
 router.post("/register", validate(registerSchema), authController.register);
 router.post("/login", validate(loginSchema), authController.login);
 router.get("/me", requireAuth, authController.me);
+router.post(
+  "/verify-email",
+  validate(verifySchema),
+  authController.verifyEmail,
+);
+router.post(
+  "/resend-verification",
+  requireAuth,
+  authController.resendVerification,
+);
 
 export default router;

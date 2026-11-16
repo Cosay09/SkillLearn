@@ -14,3 +14,13 @@ export async function me(req, res) {
   const user = await authService.getUserById(req.userId);
   res.json({ user });
 }
+
+export async function verifyEmail(req, res) {
+  const user = await authService.verifyEmail(req.body.token);
+  res.json({ user });
+}
+
+export async function resendVerification(req, res) {
+  await authService.resendVerification(req.userId);
+  res.json({ ok: true });
+}

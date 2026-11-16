@@ -61,6 +61,7 @@ export default function Register() {
         />
         <FormField
           label="Email"
+          hint="Use your university email address, such as 2023510xxxx@cse.bubt.edu.bd"
           name="email"
           type="email"
           autoComplete="email"
