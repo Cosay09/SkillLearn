@@ -1,1 +1,227 @@
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/bricolage-grotesque";
 @import "tailwindcss";
+
+:root {
+  color-scheme: light dark;
+
+  /* Surfaces and text */
+  --bg: #f1f4f0;
+  --surface: #fafbf9;
+  --ink: #10231c;
+  --muted: #46594f;
+  --line: #d3dbd2;
+  --line-strong: #7c9086;
+
+  /* Brand: jade green carries actions, marigold is the single accent */
+  --brand: #0b5d46;
+  --brand-strong: #08493a;
+  --on-brand: #f6faf7;
+  --accent: #f2b33d;
+  --accent-hover: #f6c25c;
+  --on-accent: #10231c;
+  --focus: #0b5d46;
+
+  /* Drenched green panels */
+  --band: #0b5d46;
+  --on-band: #f2f7f3;
+  --band-soft: #cfe5da;
+
+  /* Errors */
+  --danger: #b3261e;
+  --danger-wash: #fbe9e6;
+
+  /* Shape and motion. Controls 10px, panels 18px, circles for identity marks only */
+  --radius-control: 10px;
+  --radius-panel: 18px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0c1613;
+    --surface: #13221d;
+    --ink: #e9f0ea;
+    --muted: #a3b5ab;
+    --line: #213730;
+    --line-strong: #5e7d6f;
+    --brand: #4fcba2;
+    --brand-strong: #6fd9b6;
+    --on-brand: #07140f;
+    --focus: #f2b33d;
+    --band: #11382c;
+    --on-band: #ecf4ee;
+    --band-soft: #b7d6c8;
+    --danger: #ff9a8f;
+    --danger-wash: #3a1b18;
+  }
+}
+
+/* Lets Tailwind utilities such as bg-canvas and text-muted read the variables above */
+@theme inline {
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-canvas: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-on-brand: var(--on-brand);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-band: var(--band);
+  --color-on-band: var(--on-band);
+  --color-band-soft: var(--band-soft);
+  --color-danger: var(--danger);
+  --color-danger-wash: var(--danger-wash);
+}
+
+@layer base {
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display text-balance;
+  }
+
+  ::selection {
+    background: var(--brand);
+    color: var(--on-brand);
+  }
+
+  input {
+    caret-color: var(--brand);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-color: var(--line-strong) transparent;
+  }
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      transform 160ms var(--ease-out),
+      background-color 160ms ease,
+      border-color 160ms ease;
+  }
+
+  .btn-sm {
+    min-height: 2.5rem;
+    padding: 0 1rem;
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-primary {
+    background: var(--brand);
+    color: var(--on-brand);
+  }
+
+  .btn-accent {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .btn-quiet {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover {
+      background: var(--brand-strong);
+    }
+    .btn-accent:hover {
+      background: var(--accent-hover);
+    }
+    .btn-quiet:hover {
+      background: var(--surface);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition: background-color 160ms ease, border-color 160ms ease;
+    }
+    .btn:active {
+      transform: none;
+    }
+  }
+
+    .field {
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-control);
+    background: var(--bg);
+    padding: 0 0.875rem;
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  .field:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 30%, transparent);
+  }
+
+  .field:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+/* The one authored moment: the landing hero rises in, staggered by --i */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.rise-in {
+  animation: rise-in 420ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-in {
+    animation: none;
+  }
+}
