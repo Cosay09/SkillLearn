@@ -29,6 +29,7 @@ const linkClass = ({ isActive }) =>
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const verified = Boolean(user?.emailVerifiedAt);
 
   function handleLogout() {
     logout();
@@ -53,13 +54,15 @@ export default function Navbar() {
 
         {user ? (
           <div className="flex items-center gap-2">
-            <div className="hidden items-center gap-1 sm:flex">
-              {links.map((link) => (
-                <NavLink key={link.to} to={link.to} className={linkClass}>
-                  {link.label}
-                </NavLink>
-              ))}
-            </div>
+            {verified && (
+              <div className="hidden items-center gap-1 sm:flex">
+                {links.map((link) => (
+                  <NavLink key={link.to} to={link.to} className={linkClass}>
+                    {link.label}
+                  </NavLink>
+                ))}
+              </div>
+            )}
             <span
               role="img"
               aria-label={user.name}

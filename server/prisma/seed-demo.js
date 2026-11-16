@@ -84,7 +84,7 @@ async function main() {
   for (const p of people) {
     const user = await prisma.user.upsert({
       where: { email: p.email },
-      update: { name: p.name, year: p.year, bio: p.bio, department: "CSE" },
+      update: { name: p.name, year: p.year, bio: p.bio, department: "CSE", emailVerifiedAt: new Date() },
       create: {
         name: p.name,
         email: p.email,
@@ -92,6 +92,7 @@ async function main() {
         year: p.year,
         bio: p.bio,
         department: "CSE",
+        emailVerifiedAt: new Date(),
       },
     });
 

@@ -11,6 +11,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Skills from "./pages/Skills";
 import Profile from "./pages/Profile";
+import VerifyEmail from "./pages/VerifyEmail";
 
 export default function App() {
   return (
@@ -32,6 +33,9 @@ export default function App() {
           <Route path="/skills" element={<Skills />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
+
+        <Route path="/" element={<Landing />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
 
         <Route
           path="*"

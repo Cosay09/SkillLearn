@@ -52,8 +52,18 @@ export function AuthProvider({ children }) {
     setUser(updated);
   }
 
+  async function refreshUser() {
+    if (!localStorage.getItem("token")) return;
+    try {
+      const data = await getMe();
+      setUser(data.user);
+    } catch {
+      // A bad token is already handled by the unauthorized handler
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
