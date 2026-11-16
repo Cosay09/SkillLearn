@@ -5,6 +5,8 @@ import authRoutes from "./routes/authRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
  import userRoutes from "./routes/userRoutes.js";
  import skillRoutes from "./routes/skillRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import skillRoutes from "./routes/skillRoutes.js";
 
 const app = express();
 app.use(cors({ origin: process.env.CLIENT_URL }));
