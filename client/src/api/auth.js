@@ -1,6 +1,6 @@
 
 /*
-    Mahadi push korbe
+    Mahadi push kore
 */
 
 import { api } from "./client";
