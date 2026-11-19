@@ -1,7 +1,3 @@
-/*
-    Jim push korbe
-*/
-
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import { ProtectedRoute, GuestRoute } from "./routes/ProtectedRoute";
@@ -12,6 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import Skills from "./pages/Skills";
 import Profile from "./pages/Profile";
 import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 export default function App() {
   return (
@@ -22,6 +20,7 @@ export default function App() {
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
@@ -36,6 +35,7 @@ export default function App() {
 
         <Route path="/" element={<Landing />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route
           path="*"

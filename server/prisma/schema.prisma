@@ -50,6 +50,8 @@ model User {
   emailVerifiedAt   DateTime? @map("email_verified_at")
   verifyTokenHash   String?   @map("verify_token_hash")
   verifyTokenExpiry DateTime? @map("verify_token_expiry")
+  resetTokenHash    String?   @map("reset_token_hash")
+  resetTokenExpiry  DateTime? @map("reset_token_expiry")
 
   userSkills        UserSkill[]
   availabilitySlots AvailabilitySlot[]
