@@ -71,6 +71,14 @@ export default function Login() {
           onChange={handleChange}
           required
         />
+        <p className="-mt-2 text-right text-sm">
+          <Link
+            to="/forgot-password"
+            className="font-semibold text-ink underline decoration-line-strong underline-offset-4 hover:decoration-brand"
+          >
+            Forgot password?
+          </Link>
+        </p>
 
         <button
           type="submit"
