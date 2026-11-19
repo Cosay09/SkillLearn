@@ -25,10 +25,10 @@ export default function Dashboard() {
         {cards.map((title) => (
           <div
             key={title}
-            className="rounded-xl border border-slate-200 bg-white p-5"
+            className="rounded-xl border border-slate-200 bg-black p-5"
           >
             <h2 className="font-semibold">{title}</h2>
-            <p className="mt-2 text-sm text-slate-500">Nothing here yet.</p>
+            <p className="mt-2 text-sm text-slate-200">Nothing here yet.</p>
           </div>
         ))}
       </div>
