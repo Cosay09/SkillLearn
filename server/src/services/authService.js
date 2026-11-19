@@ -3,10 +3,11 @@ import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
 import { AppError } from "../utils/AppError.js";
-import { sendVerificationEmail } from "./mailService.js";
+import { sendPasswordResetEmail, sendVerificationEmail } from "./mailService.js";
 
 const TOKEN_LIFETIME_MS = 24 * 60 * 60 * 1000; // a verification link works for 24 hours
 const RESEND_WAIT_MS = 60 * 1000; // at most one new email a minute
+const RESET_LIFETIME_MS = 60 * 60 * 1000; // a reset link works for 1 hour
 
 function makeToken(user) {
   return jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
@@ -16,7 +17,7 @@ function makeToken(user) {
 
 // Never send secrets to the client
 export function publicUser(user) {
-  const { passwordHash, verifyTokenHash, verifyTokenExpiry, ...rest } = user;
+  const { passwordHash, verifyTokenHash, verifyTokenExpiry, resetTokenHash, resetTokenExpiry, ...rest } = user;
   return rest;
 }
 
@@ -183,4 +184,65 @@ export async function resendVerification(userId) {
       "We could not send the email. Please try again in a moment.",
     );
   }
+}
+
+export async function requestPasswordReset(email) {
+  const user = await prisma.user.findUnique({
+    where: { email: email.toLowerCase() },
+  });
+
+  // The caller gets the same answer either way, so nobody can learn which emails exist
+  if (!user) return;
+
+  // The expiry is always "sent time + 1 hour", so it also tells us when we last sent
+  if (user.resetTokenExpiry) {
+    const sentAt = user.resetTokenExpiry.getTime() - RESET_LIFETIME_MS;
+    if (Date.now() - sentAt < RESEND_WAIT_MS) return;
+  }
+
+  const rawToken = crypto.randomBytes(32).toString("hex");
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      resetTokenHash: hash(rawToken),
+      resetTokenExpiry: new Date(Date.now() + RESET_LIFETIME_MS),
+    },
+  });
+
+  const link = `${process.env.CLIENT_URL}/reset-password?token=${rawToken}`;
+  try {
+    await sendPasswordResetEmail({ to: user.email, name: user.name, link });
+  } catch (err) {
+    console.error("Could not send password reset email:", err.message);
+  }
+}
+
+export async function resetPassword({ token, password }) {
+  const user = await prisma.user.findFirst({
+    where: {
+      resetTokenHash: hash(token),
+      resetTokenExpiry: { gt: new Date() },
+    },
+  });
+
+  if (!user) {
+    throw new AppError(
+      400,
+      "INVALID_TOKEN",
+      "This link is invalid or has expired.",
+    );
+  }
+
+  const passwordHash = await bcrypt.hash(password, 10);
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      passwordHash,
+      // Clearing the token makes the link one-time use
+      resetTokenHash: null,
+      resetTokenExpiry: null,
+      // Opening the link proves the student owns this mailbox
+      emailVerifiedAt: user.emailVerifiedAt ?? new Date(),
+    },
+  });
 }

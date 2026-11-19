@@ -24,3 +24,13 @@ export async function resendVerification(req, res) {
   await authService.resendVerification(req.userId);
   res.json({ ok: true });
 }
+
+export async function forgotPassword(req, res) {
+  await authService.requestPasswordReset(req.body.email);
+  res.json({ ok: true });
+}
+
+export async function resetPassword(req, res) {
+  await authService.resetPassword(req.body);
+  res.json({ ok: true });
+}

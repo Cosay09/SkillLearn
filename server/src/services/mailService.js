@@ -43,3 +43,23 @@ export async function sendVerificationEmail({ to, name, link }) {
     html: `<p>Hi ${escapeHtml(name)},</p><p>Open the link below to verify your university email and finish creating your SkillLearn account.</p><p><a href="${link}">Verify my email</a></p><p>The link works for 24 hours. If you did not sign up, you can ignore this email.</p>`,
   });
 }
+
+export async function sendPasswordResetEmail({ to, name, link }) {
+  const mailer = getTransporter();
+
+  // Without Gmail details the link is printed in the terminal instead
+  if (!mailer) {
+    console.log(
+      `\nEmail is not configured. Password reset link for ${to}:\n${link}\n`,
+    );
+    return;
+  }
+
+  await mailer.sendMail({
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    to,
+    subject: "Reset your SkillLearn password",
+    text: `Hi ${name},\n\nOpen this link to choose a new password for your SkillLearn account:\n${link}\n\nThe link works for 1 hour. If you did not ask for this, you can ignore this email and your password will stay the same.`,
+    html: `<p>Hi ${escapeHtml(name)},</p><p>Open the link below to choose a new password for your SkillLearn account.</p><p><a href="${link}">Reset my password</a></p><p>The link works for 1 hour. If you did not ask for this, you can ignore this email and your password will stay the same.</p>`,
+  });
+}

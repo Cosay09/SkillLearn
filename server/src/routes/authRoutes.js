@@ -19,20 +19,43 @@ const verifySchema = z.object({
   token: z.string().min(10, "The link is incomplete"),
 });
 
+const forgotSchema = z.object({
+  email: z.email("Enter a valid email address"),
+});
+
+const resetSchema = z.object({
+  token: z.string().min(10, "The link is incomplete"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
 const router = Router();
 
 router.post("/register", validate(registerSchema), authController.register);
 router.post("/login", validate(loginSchema), authController.login);
 router.get("/me", requireAuth, authController.me);
+
 router.post(
   "/verify-email",
   validate(verifySchema),
   authController.verifyEmail,
 );
+
 router.post(
   "/resend-verification",
   requireAuth,
   authController.resendVerification,
+);
+
+router.post(
+  "/forgot-password",
+  validate(forgotSchema),
+  authController.forgotPassword,
+);
+
+router.post(
+  "/reset-password",
+  validate(resetSchema),
+  authController.resetPassword,
 );
 
 export default router;
