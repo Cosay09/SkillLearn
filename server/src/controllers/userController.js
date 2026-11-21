@@ -4,7 +4,10 @@ import * as availabilityService from "../services/availabilityService.js";
 import { parseId } from "../utils/parseId.js";
 
 export async function getProfile(req, res) {
-  const profile = await userService.getPublicProfile(parseId(req.params.id));
+    const profile = await userService.getPublicProfile(
+      parseId(req.params.id),
+      req.userId,
+    );
   res.json({ user: profile });
 }
 
