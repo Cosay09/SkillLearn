@@ -1,7 +1,3 @@
-/*
-    Jim push korbe
-*/
-
 import { api } from "./client";
 
 export const updateProfile = (data) =>
@@ -9,3 +5,4 @@ export const updateProfile = (data) =>
 export const getAvailability = () => api("/users/me/availability");
 export const saveAvailability = (slots) =>
   api("/users/me/availability", { method: "PUT", body: { slots } });
+export const getUser = (id) => api(`/users/${id}`);
