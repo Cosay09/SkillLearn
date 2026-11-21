@@ -10,6 +10,9 @@ import Profile from "./pages/Profile";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Matches from "./pages/Matches";
+import PublicProfile from "./pages/PublicProfile";
+import Requests from "./pages/Requests";
 
 export default function App() {
   return (
@@ -25,6 +28,9 @@ export default function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/matches" element={<Matches />} />
+          <Route path="/users/:id" element={<PublicProfile />} />
+          <Route path="/requests" element={<Requests />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
