@@ -1,4 +1,7 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Bell } from "@phosphor-icons/react";
+import { getNotifications } from "../api/notifications";
 import { useAuth } from "../context/AuthContext";
 import Avatar from "./Avatar";
 import SwapMark from "./SwapMark";
@@ -24,6 +27,18 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const verified = Boolean(user?.emailVerifiedAt);
+
+  const { pathname } = useLocation();
+  const [unread, setUnread] = useState(0);
+
+  // Refresh the count when the page changes, or when the Notifications page marks all as read
+  useEffect(() => {
+    if (!verified) return;
+    const load = () => getNotifications().then((d) => setUnread(d.unreadCount)).catch(() => {});
+    load();
+    window.addEventListener('notifications-changed', load);
+    return () => window.removeEventListener('notifications-changed', load);
+  }, [verified, pathname]);
 
   function handleLogout() {
     logout();
@@ -56,6 +71,33 @@ export default function Navbar() {
                   </NavLink>
                 ))}
               </div>
+            )}
+            {verified && (
+              <NavLink
+                to="/notifications"
+                aria-label={
+                  unread > 0
+                    ? `Notifications, ${unread} unread`
+                    : "Notifications"
+                }
+                className={({ isActive }) =>
+                  `relative inline-flex h-10 w-10 items-center justify-center rounded-(--radius-control) transition-colors duration-150 ${
+                    isActive
+                      ? "bg-surface text-ink"
+                      : "text-muted hover:text-ink"
+                  }`
+                }
+              >
+                <Bell size={22} aria-hidden="true" />
+                {unread > 0 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand px-1 text-[10px] font-semibold text-on-brand"
+                  >
+                    {unread > 9 ? "9+" : unread}
+                  </span>
+                )}
+              </NavLink>
             )}
             <Avatar
               name={user.name}

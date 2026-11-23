@@ -13,6 +13,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Matches from "./pages/Matches";
 import PublicProfile from "./pages/PublicProfile";
 import Requests from "./pages/Requests";
+import Notifications from "./pages/Notifications";
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/skills" element={<Skills />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/notifications" element={<Notifications />} />
         </Route>
 
         <Route path="/" element={<Landing />} />
