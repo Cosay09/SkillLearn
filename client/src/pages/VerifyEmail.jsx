@@ -137,7 +137,7 @@ export default function VerifyEmail() {
           <p className="mt-2 text-muted">
             We sent a link to{" "}
             <strong className="font-semibold text-ink">{user.email}</strong>.
-            Open it to finish creating your account.
+            Click on the link to finish creating your account.
           </p>
           <p className="mt-2 text-sm text-muted">
             Cannot find it? Check your spam folder.
