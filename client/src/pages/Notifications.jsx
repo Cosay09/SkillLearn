@@ -5,7 +5,11 @@ import EmptyState from "../components/EmptyState";
 import { formatDate } from "../utils/person";
 
 // Where each notification type leads
-const TARGET = { request: "/requests", decision: "/requests" };
+const TARGET = {
+  request: "/requests",
+  decision: "/requests",
+  booking: "/sessions",
+};
 
 export default function Notifications() {
   const [status, setStatus] = useState("loading"); // loading, ready or error

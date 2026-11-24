@@ -10,6 +10,7 @@ const links = [
   { to: "/dashboard", label: "Dashboard" },
   { to: "/matches", label: "Find tutors" },
   { to: "/requests", label: "Requests" },
+  { to: "/sessions", label: "Sessions" },
   { to: "/skills", label: "Skills" },
   { to: "/profile", label: "Profile" },
 ];
