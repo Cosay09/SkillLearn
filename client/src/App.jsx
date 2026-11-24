@@ -14,6 +14,7 @@ import Matches from "./pages/Matches";
 import PublicProfile from "./pages/PublicProfile";
 import Requests from "./pages/Requests";
 import Notifications from "./pages/Notifications";
+import Sessions from "./pages/Sessions";
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/skills" element={<Skills />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/sessions" element={<Sessions />} />
         </Route>
 
         <Route path="/" element={<Landing />} />

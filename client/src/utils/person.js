@@ -17,3 +17,21 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
 export function formatDate(value) {
   return dateFormat.format(new Date(value));
 }
+
+const dayFormat = new Intl.DateTimeFormat("en-GB", {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+});
+const timeFormat = new Intl.DateTimeFormat("en-GB", {
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+});
+
+// "Wed 25 Nov, 16:00 to 17:00" in the viewer's own timezone
+export function formatSession(start, end) {
+  const from = new Date(start);
+  const to = new Date(end);
+  return `${dayFormat.format(from)}, ${timeFormat.format(from)} to ${timeFormat.format(to)}`;
+}
