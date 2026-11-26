@@ -112,6 +112,7 @@ export default function RequestRow({ request, direction, busy, onAction }) {
             >
               Book session
             </button>
+            
           )}
         </div>
       </div>

@@ -9,6 +9,7 @@ import matchRoutes from "./routes/matchRoutes.js";
 import requestRoutes from "./routes/requestRoutes.js";
 import notificationRoutes from './routes/notificationRoutes.js';
 import sessionRoutes from './routes/sessionRoutes.js';
+import messageRoutes from './routes/messageRoutes.js';
 
 const app = express();
 app.use(cors({ origin: process.env.CLIENT_URL }));
@@ -21,6 +22,7 @@ app.use("/api/matches", matchRoutes);
 app.use("/api/requests", requestRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/sessions", sessionRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
