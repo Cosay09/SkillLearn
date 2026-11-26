@@ -15,6 +15,7 @@ import PublicProfile from "./pages/PublicProfile";
 import Requests from "./pages/Requests";
 import Notifications from "./pages/Notifications";
 import Sessions from "./pages/Sessions";
+import Messages from "./pages/Messages";
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/sessions" element={<Sessions />} />
+          <Route path="/messages/:requestId?" element={<Messages />} />
         </Route>
 
         <Route path="/" element={<Landing />} />

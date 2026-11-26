@@ -11,6 +11,7 @@ const links = [
   { to: "/matches", label: "Find tutors" },
   { to: "/requests", label: "Requests" },
   { to: "/sessions", label: "Sessions" },
+  { to: "/messages", label: "Messages" },
   { to: "/skills", label: "Skills" },
   { to: "/profile", label: "Profile" },
 ];
